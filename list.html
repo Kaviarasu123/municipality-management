@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #list {
+            background-color: black;
+            color: white;
+        }
+    </style>
+</head>
+
+<body onload="init()">
+    <div id="tab">
+        <table id="list" cellspacing="0px" cellpadding="20px" text-align="center">
+            <thead>
+                <tr>
+                    <td>Email</td>
+                    <td>Typeofproblem</td>
+                    <td>Describe</td>
+                    <td>Address</td>
+                    <td>District</td>
+                    <td>State</td>
+                    <td>Pincode</td>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <script>
+        function init() {
+            // alert("onload")
+            // API call
+            fetch("http://localhost:3002/api/form/getForm", {
+                method: "GET",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
+                return response.json();
+            }).then(data => {
+                console.log("lozz", data)
+                if (data.error) {
+                    console.log("data.message", data.message)
+                    alert(data.message)
+                } else {
+                    console.log(data)
+                    setTemplate(data);
+                }
+            }).catch(error => {
+                console.log("error", error)
+                toast(error)
+            });
+        }
+
+        function setTemplate(data) {
+            // listValue
+            if (data.data.length > 0) {
+                var rows = "";
+                data.data.forEach((element, index) => {
+                    rows += "<tr><td>" + element.email + "</td><td>" + element.typeofproblem + "</td><td>" + element.describe + "</td> <td>" + element.address + "</td><td>" + element.district + "</td><td>" + element.state + "</td><td>" + element.pincode + "</td></tr>";
+                });
+                console.log(rows)
+                document.querySelector("#list tbody").innerHTML += rows
+
+            }
+        }
+
+    </script>
+</body>
+
+</html>

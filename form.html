@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complaint form</title>
+    <link rel="stylesheet" href="./CSS/form.css">
+
+</head>
+
+<body>
+    <div class="container_fluid">
+        <div class="heading">
+            <img src="./images/logo.png" alt="" width="80px" height="80px" style="border-radius: 50%;">
+            <h1 class="main">Municipal Corporation</h1> 
+            <ul>
+                <li><a href="index.html">Home</a></li>
+            </ul>
+        </div>
+        <div>
+            <form method="post">
+                <table>
+                    <tr>
+                        <td><label for="typeofproblem">Choose type of problem:</label></td>
+                        <td><select id="typeofproblem" name="typeofproblem" class="input">
+                                <option>Solid waste problem</option>
+                                <option>Water problem</option>
+                                <option>Building</option>
+                                <option>Roads and traffic</option>
+                                <option>Drainage</option>
+                                <option>Hospital</option>
+                                <option>Electrical</option>
+
+                            </select></td>
+                    </tr>
+                    <tr>
+                        <td><label for="describe">Content of the Complaint:</label></td>
+                        <td><textarea name="describe" id="describe" cols="15" rows="2" class="input"></textarea></td>
+                    </tr>
+                    <tr>
+                        <td><label for="address">Address:</label></td>
+                        <td><textarea name="address" id="address" class="input" cols="30" rows="2"
+                                placeholder="Door num and street name"></textarea></td>
+                    </tr>
+                    <tr>
+                        <td><label for="district">District:</label></td>
+                        <td><select class="input" id="district" name="district">
+                                <option>Ariyalur</option>
+                                <option>Chennai</option>
+                                <option>Coimbatore</option>
+                                <option>Cuddalore</option>
+                                <option>Dindigul</option>
+                                <option>Erode</option>
+                                <option>Kancheepuram</option>
+                                <option>Kanniyakumari</option>
+                                <option>Karur</option>
+                                <option>Krishnagiri</option>
+                                <option>Madurai</option>
+                                <option>Nagapattinam</option>
+                                <option>Namakkal</option>
+                                <option>Perambalur</option>
+                                <option>Ramanathapuram</option>
+                                <option>Salem</option>
+                                <option>Sivagangai</option>
+                                <option>Thanjavur</option>
+                                <option>Theni</option>
+                                <option>The Nilgiris Udagamandalam</option>
+                                <option>Thirunelveli</option>
+                                <option>Thiruvallur</option>
+                                <option>Thiruvannamalai</option>
+                                <option>Thiruvarur</option>
+                                <option>Thoothukudi</option>
+                                <option>Tiruchirapalli</option>
+                                <option>Tiruppur</option>
+                                <option>Vellore</option>
+                                <option>Villupuram</option>
+                                <option>Virudhunagar</option>
+                            </select></td>
+                    </tr>
+                    <tr>
+                        <td><label for="State">State:</label></td>
+                        <td><select class="input" id="state" name="state">
+                                <option>Andhra Pradesh</option>
+                                <option>Arunachal Pradesh</option>
+                                <option>Assam</option>
+                                <option>Bihar</option>
+                                <option>Chhattisgarh</option>
+                                <option>Goa </option>
+                                <option>Gujarat</option>
+                                <option>Haryana</option>
+                                <option>Himachal Pradesh </option>
+                                <option>Jammu and Kashmir </option>
+                                <option>Jharkhand</option>
+                                <option>Karnataka</option>
+                                <option>Kerala</option>
+                                <option>Madhya Pradesh</option>
+                                <option>Maharashtra</option>
+                                <option>Manipur </option>
+                                <option>Meghalaya</option>
+                                <option>Mizoram</option>
+                                <option>Nagaland</option>
+                                <option>Odisha</option>
+                                <option>Punjab </option>
+                                <option>Rajasthan</option>
+                                <option>Sikkim</option>
+                                <option>Tamil Nadu</option>
+                                <option> Telangana </option>
+                                <option>Tripura </option>
+                                <option>Uttar Pradesh</option>
+                                <option>Uttarakhand </option>
+                                <option>West Bengal</option>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="pin">Pincode:</label></td>
+                        <td><input id="pincode" class="input" type="number" name="pincode"></td>
+                    </tr>
+
+
+                    <tr>
+                        <td><label class="check">
+                                <input class="input" type="checkbox" name="remember">Remember me
+                            </label></td>
+                    </tr>
+                    <tr>
+                        <td><span onclick="formSubmit()">Submit</span></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <div id="snackbar">test</div>
+    </div>
+    <!------------------------------------------------------------------------------------------------------------------------->
+    <script>
+        async function formSubmit() {
+            // value binding
+            var typeofproblem = document.getElementById("typeofproblem").value;
+            var describe = document.getElementById("describe").value;
+            var address = document.getElementById("address").value;
+            var state = document.getElementById("state").value;
+            var district = document.getElementById("district").value;
+            var pincode = document.getElementById("pincode").value;
+            var req = {
+                typeofproblem: typeofproblem,
+                describe: describe,
+                address: address,
+                state: state,
+                district: district,
+                pincode: pincode,
+            }
+            console.log(req)
+
+            // API call
+            fetch("http://localhost:3002/api/form/addForm", {
+                method: "POST",
+                body: JSON.stringify(req),
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
+                return response.json();
+            }).then(data => {
+                console.log("lozz", data)
+                if (data.error) {
+                    console.log("data.message", data.message)
+                    alert(data.message)
+                } else {
+                    console.log(data)
+                    alert(data.message);
+                    document.getElementById("describe").value = "";
+                    document.getElementById("address").value = "";
+                    document.getElementById("pincode").value = "";
+                    window.location.href = "./list.html"
+
+                }
+            }).catch(error => {
+                console.log("error", error)
+                toast(error)
+            });
+
+        }
+        function toast(message) {
+
+            var x = document.getElementById("snackbar");
+            x.className = "show";
+            setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+        }
+
+    </script>
+    <!------------------------------------------------------------------------------------------------------------------------------>
+  
+
+</body>
+
+</html>

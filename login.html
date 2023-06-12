@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log in</title>
+    <link rel="stylesheet" href="./CSS/form.css">
+</head>
+
+<body>
+    <div class="heading">
+        <img src="./images/logo.png" alt="" width="80px" height="80px" style="border-radius: 50%;">
+        <h1 class="main">Municipal Corporation</h1> 
+        <ul>
+            <li><a href="index.html">Home</a></li>
+        </ul>
+    </div>
+    <form action="form.html">
+
+        <table class="table">
+            <h2>Log in</h2>
+            <tr>
+                <td><label id="left" for="address">Email:</label></td>
+                <td><input type="email" name="email" id="email"></td>
+            </tr>
+            <tr>
+                <td><label id="left" for="password">Password:</label></td>
+                <td><input type="password" name="password" id="password"></td>
+            </tr>
+            <tr>
+                <td><span style="cursor:pointer;" onclick="formSubmit()">Submit</span></td>
+            </tr>
+        </table>
+    </form>
+    <script>
+        async function formSubmit() {
+            var email = document.getElementById("email").value;
+            var password = document.getElementById("password").value;
+
+            var req = {
+                password: password,
+                email: email
+            }
+
+            // API call
+            fetch("http://localhost:3002/api/user/login", {
+                method: "POST",
+                body: JSON.stringify(req),
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
+                return response.json();
+            }).then(data => {
+                console.log("lozz", data)
+                if (data.error) {
+                    console.log("data.message", data.message)
+                    alert(data.message)
+                } else {
+                    console.log(data)
+                    localStorage.setItem('token',data.data.token)
+                    alert(data.message);
+                    window.location.href = "./form.html"
+
+                }
+            }).catch(error => {
+                console.log("error", error)
+                toast(error)
+            });
+        }
+    </script>
+</body>
+
+</html>
